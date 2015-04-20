@@ -4,6 +4,7 @@ var connected;
 
 
 CharacterList.init();
+Game.init();
 
 requestConnection();
 
@@ -45,11 +46,28 @@ function messageReceived(e) {
 
 		case "welcome":
 		console.log("Connected with connectionId:", data.connectionId);
-		socket.send(JSON.stringify({type:'getCharacters'}));
+		socket.send(JSON.stringify({
+			type:'introduce',
+			userId:userId
+		}));
 		break;
 
-		case "characterList":
+		case "myCharacters":
 		CharacterList.setItems(data.characters);
+		break;
+
+		case "allCharacters":
+		Game.setCharacters(data.characters);
+		break;
+
+		case "returnSelectedCharacter":
+		console.log("du valde", data.character);
+		Game.setActiveCharacter(data.character);
+		break;
+
+		case "characterPos":
+		Game.updateCharacterPos(data.characterId, data.x, data.y);
+		console.log(data.characterId, data.x, data.y);
 		break;
 
 		default:

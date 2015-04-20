@@ -1,6 +1,7 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var Player = require('./player');
+var player;
 var db = require('./db');
 db.connect();
 
@@ -42,27 +43,58 @@ function incomingRequest(request) {
     }
 
     connection = request.accept(allowedProtocol, request.origin);
+	connection.on('message', incomingMessage);
+	connection.on('close', connectionClosed);
+
     connection.id = connectionId++;
 
-	var player = new Player(connection, db);
+	player = new Player(connection, db);
 	players.push(player);
 }
 
+function connectionClosed(reasonCode, description) {
+	//var userExit = {type:"userExit", id: this.connection.id};
+	//sendToAll(userExit);
+	console.log((new Date()) + ' Peer ' + this.connection.remoteAddress + ' disconnected.', reasonCode, description);
+}
+
+function incomingMessage(message) {
+	if(message.type !== 'utf8') {
+		console.warn("Invalid message", message);
+		return;
+	}
+	try {
+		var data = JSON.parse(message.utf8Data);
+	} catch(e) {
+		console.error("Error parsing message", e);
+		return;
+	}
+
+	switch(data.type) {
+
+		case "characterPos":
+		console.log("got position, forward to others");
+		sendToOthers(data);
+		break;
+
+
+		default:
+		player.incomingMessage(data);
+	}
+
+}
 
 function sendToAll(message) {
-
-
-	for (var i in connections) {
-		connections[i].sendUTF(JSON.stringify(message));
+	for (var i=0; i<players.length; i++) {
+		players[i].connection.sendUTF(JSON.stringify(message));
 	}
 }
 
 
 function sendToOthers(message) {
-
-	for (var i in connections) {
-		if(connections[i]!==connection) {
-			connections[i].sendUTF(JSON.stringify(message));
+	for (var i=0; i<players.length; i++) {
+		if(players[i]!==player) {
+			players[i].connection.sendUTF(JSON.stringify(message));
 		}
 	}
 }

@@ -29,7 +29,9 @@ if(empty($token)) {
 	$googleId = $googleUser->sub;
 	// name, email, gender, picture, email
 	$_SESSION['googleId'] = $googleId;
+}
 
+if(!empty($googleId)) {
 	$db = new DatabasePDO($config->db->host, $config->db->user, $config->db->password, $config->db->database);
 	$user = $db->getRow("SELECT * FROM users WHERE google_id = ?", array($googleId));
 
@@ -37,7 +39,9 @@ if(empty($token)) {
 		$sql = "INSERT INTO users(google_id, name, email) VALUES(?,?,?);";
 		$userId = $db->insert($sql, array($googleId, $googleUser->name, $googleUser->email));
 		echo "user created";
-		$user = $db->getRow("SELECT * FROM users WHERE google_id = ?", array($googleId));
+		$user = $db->getRow("SELECT * FROM users WHERE user_id = ?", array($userId));
+	} else {
+		$userId = $user['user_id'];
 	}
 
 
@@ -52,14 +56,18 @@ if(empty($token)) {
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="css/main.css" type="text/css" />
 		<script src="js/CharacterList.js"></script>
-		<?php if(isset($googleId)) echo "<script>var userId='{$userId}'</script>"; ?>
+		<script src="js/Character.js"></script>
+		<script src="js/Camera.js"></script>
+		<script src="js/Game.js"></script>
+		<?php if(isset($userId)) echo "<script>var userId='{$userId}'</script>"; ?>
 	</head>
 	<body>
 
-		<?php if(isset($googleId)): ?>
+		<?php if(isset($userId)): ?>
 			<section class="user">
 				<?php echo $user['name']; ?><br>
-				<?php echo $user['email']; ?>
+				<?php echo $user['email']; ?><br>
+				<a href="logout.php">Logout</a>
 			</section>
 
 			<section class="login">
@@ -67,14 +75,12 @@ if(empty($token)) {
 			</section>
 
 			<section class="play">
-
-
 				<canvas id="canvas" width="800" height="600"></canvas>
 			</section>
+			<script src="js/main.js"></script>
 		<?php else: ?>
 			<a href="<?php echo $googleLoginURL;?>">Login using Google</a>
 		<?php endif; ?>
 
-		<script src="js/main.js"></script>
 	</body>
 </html>

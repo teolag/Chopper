@@ -22,8 +22,11 @@ module.exports = {
 		var query = myCon.query('SELECT character_id AS characterId, name, created, pos_x AS posX, pos_y AS posY, team FROM characters WHERE character_id=?', id, callback);
 	},
 
-	getCharacters: function(callback) {
+	getMyCharacters: function(userId, callback) {
+		var query = myCon.query('SELECT character_id AS characterId, name, created, pos_x AS posX, pos_y AS posY, team FROM characters WHERE user_id=?', userId, callback);
+	},
 
+	getAllCharacters: function(callback) {
 		var query = myCon.query('SELECT character_id AS characterId, name, created, pos_x AS posX, pos_y AS posY, team FROM characters ORDER BY name', callback);
 	}
 

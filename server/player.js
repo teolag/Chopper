@@ -3,8 +3,6 @@
 var Player = function(connection, db) {
 	this.db = db;
 	this.connection = connection;
-	this.connection.on('message', this.onIncommingMessage.bind(this));
-    this.connection.on('close', this.onConnectionClose.bind(this));
 
 	this.sendToClient({
 		type: 'welcome',
@@ -14,34 +12,15 @@ var Player = function(connection, db) {
 
 Player.prototype = {
 
-	onConnectionClose: function(reasonCode, description) {
-		//var userExit = {type:"userExit", id: this.connection.id};
-		//sendToAll(userExit);
-		console.log((new Date()) + ' Peer ' + this.connection.remoteAddress + ' disconnected.', reasonCode, description);
-	},
 
-
-
-	onIncommingMessage: function(message) {
-		if(message.type !== 'utf8') {
-			console.warn("Invalid message", message);
-			return;
-		}
-		try {
-			var data = JSON.parse(message.utf8Data);
-		} catch(e) {
-			console.error("Error parsing message", e);
-			return;
-		}
+	incomingMessage: function(data) {
 
 		switch(data.type) {
 
-			case "getCharacters":
-			this.db.getCharacters(this.characterListResponse.bind(this));
-			break;
-
-			case "selectCharacter":
-			this.db.getCharacter(data.characterId, this.getCharacterResponse.bind(this));
+			case "introduce":
+			this.userId = data.userId;
+			this.db.getMyCharacters(this.userId, this.myCharactersResponse.bind(this));
+			this.db.getAllCharacters(this.allCharactersResponse.bind(this));
 			break;
 
 			default:
@@ -49,11 +28,20 @@ Player.prototype = {
 		}
 	},
 
-	characterListResponse: function(err, data) {
-		console.log("Character list response", data, err);
+	myCharactersResponse: function(err, data) {
+		console.log("My character response", data, err);
 
 		this.sendToClient({
-			type: 'characterList',
+			type: 'myCharacters',
+			characters: data
+		});
+	},
+
+	allCharactersResponse: function(err, data) {
+		console.log("All characters response", data, err);
+
+		this.sendToClient({
+			type: 'allCharacters',
 			characters: data
 		});
 	},
@@ -62,7 +50,8 @@ Player.prototype = {
 		if(err) {
 			console.error(err);
 		}
-		this.character = data;
+		this.character = data[0];
+		this.sendToClient({type:"returnSelectedCharacter", character: this.character});
 		console.log("character", this.character);
 	},
 

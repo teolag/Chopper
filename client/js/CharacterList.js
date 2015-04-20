@@ -23,10 +23,10 @@ var CharacterList = (function() {
 	};
 
 	var clickHandler = function(e) {
-		var id = e.target.dataset.id;
+		var id = parseInt(e.target.dataset.id);
 		if(id) {
 			console.log("clicked on character", id);
-			socket.send(JSON.stringify({type:'selectCharacter', characterId: id}));
+			Game.setActiveCharacterId(id);
 		}
 	};
 

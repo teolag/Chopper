@@ -36,11 +36,9 @@ if (isset($_GET['code'])) {
 
 	$token = $json->access_token;
 	$_SESSION['token'] = $token;
-	echo "Token: " . $token . "<br>";
+	//echo "Token: " . $token . "<br>";
 
-
-
-	//header("Location: index.php");
+	header("Location: index.php");
 }
 
 ?>
