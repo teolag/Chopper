@@ -53,9 +53,9 @@ function incomingRequest(request) {
 }
 
 function connectionClosed(reasonCode, description) {
-	//var userExit = {type:"userExit", id: this.connection.id};
-	//sendToAll(userExit);
-	console.log((new Date()) + ' Peer ' + this.connection.remoteAddress + ' disconnected.', reasonCode, description);
+	//var userExit = {type:"userExit", id: connection.id};
+	//sendToOthers(userExit);
+	console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.', reasonCode, description);
 }
 
 function incomingMessage(message) {

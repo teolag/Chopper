@@ -81,6 +81,7 @@ var Game = (function() {
 		};
 
 		// Horizontal lines
+		context.fillStyle = "rgba(0,0,0,0.3)";
 		for(var y=Math.round(view.top/100)*100; y<view.bottom; y+=100) {
 			context.beginPath();
 			context.moveTo(view.left, y);
@@ -90,6 +91,7 @@ var Game = (function() {
 		}
 
 		// Vertical lines
+		context.fillStyle = "rgba(0,0,0,0.3)";
 		for(var x=Math.round(view.left/100)*100; x<view.right; x+=100) {
 			context.beginPath();
 			context.moveTo(x, view.top);
