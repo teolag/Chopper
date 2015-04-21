@@ -64,7 +64,6 @@ function incomingRequest(request) {
 		switch(data.type) {
 
 			case "characterPos":
-			console.log("got position from "+connection.id+", forward to others", message);
 			forwardToOthers(message);
 			break;
 

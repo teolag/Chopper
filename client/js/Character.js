@@ -45,7 +45,7 @@
 
 		draw: function(ctx, active) {
 			if(active) {
-				var color = "#bada55";
+				var color = "#AD4545";
 			} else {
 				var color = "#badaad";
 			}
