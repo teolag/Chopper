@@ -43,11 +43,16 @@ function incomingRequest(request) {
     var connection = request.accept(allowedProtocol, request.origin);
 	connection.on('message', incomingMessage);
 	connection.on('close', connectionClosed);
-
     connection.id = connectionId++;
 
 	var player = new Player(connection, db);
 	players.push(player);
+
+	sendToOthers({type:"userEnter", id: connection.id});
+
+	console.log("Connection " + connection.id + " successfully connected");
+	console.log("Active players: ", players.length);
+
 
 	function incomingMessage(message) {
 		if(message.type !== 'utf8') {
@@ -75,9 +80,22 @@ function incomingRequest(request) {
 	}
 
 	function connectionClosed(reasonCode, description) {
-		//var userExit = {type:"userExit", id: connection.id};
-		//sendToOthers(userExit);
-		console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.', reasonCode, description);
+
+		for (var i=0; i<players.length; i++) {
+			if(players[i]===player) {
+				players.splice(i, 1);
+				break;
+			}
+		}
+
+		sendToOthers({type:"userLeave", id: connection.id});
+		console.log("Connection " + connection.id + ' disconnected.', reasonCode, description);
+		console.log("Active players: ", players.length);
+
+
+		player=null;
+		connection=null;
+
 	}
 
 
@@ -101,7 +119,6 @@ function incomingRequest(request) {
 		for (var i=0; i<players.length; i++) {
 			if(players[i]!==player) {
 				players[i].connection.sendUTF(message.utf8Data);
-				console.log("forward to", players[i].connection.id);
 			}
 		}
 	}

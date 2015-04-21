@@ -34,7 +34,7 @@ var Game = (function() {
 	};
 
 	var updateCharacterPos = function(id, x, y) {
-		console.log(id, x, y);
+		//console.log(id, x, y);
 		for(var i=0; i<characters.length; i++) {
 			var character = characters[i];
 			if(character.id===id) {
@@ -56,7 +56,7 @@ var Game = (function() {
 			activeCharacter.update(pressedKeys);
 			if(activeCharacter.moved) {
 				camera.setFocus(activeCharacter.posX, activeCharacter.posY);
-				console.log("Pos:", activeCharacter.posX, activeCharacter.posY);
+				//console.log("Pos:", activeCharacter.posX, activeCharacter.posY);
 				socket.send(JSON.stringify({
 					type:'characterPos',
 					characterId:activeCharacter.id,
@@ -117,7 +117,6 @@ var Game = (function() {
 		} else if(e.type==="keyup") {
 			pressedKeys[e.keyCode] = false;
 		}
-		console.log(pressedKeys);
 	};
 
 

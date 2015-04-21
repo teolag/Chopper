@@ -29,7 +29,7 @@ Player.prototype = {
 	},
 
 	myCharactersResponse: function(err, data) {
-		console.log("My character response", data, err);
+		//console.log("My character response", data, err);
 
 		this.sendToClient({
 			type: 'myCharacters',
@@ -38,7 +38,7 @@ Player.prototype = {
 	},
 
 	allCharactersResponse: function(err, data) {
-		console.log("All characters response", data, err);
+		//console.log("All characters response", data, err);
 
 		this.sendToClient({
 			type: 'allCharacters',
