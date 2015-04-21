@@ -43,21 +43,30 @@
 
 		},
 
-		draw: function(ctx) {
-			ctx.fillStyle = "#bada55";
+		draw: function(ctx, active) {
+			if(active) {
+				var color = "#bada55";
+			} else {
+				var color = "#badaad";
+			}
+
+			ctx.fillStyle = color;
 			ctx.beginPath();
 			ctx.arc(this.posX, this.posY, 10, 0, Math.PI*2);
 			ctx.fill();
-			ctx.textAlign = 'center';
 
-			var txt = this.name;
-			var width = ctx.measureText(txt).width;
 
-			ctx.fillStyle = "rgba(0,0,0,0.3)";
-			ctx.fillRect(this.posX-width/2-5, this.posY+15, width+10, 15);
+			if(!active) {
+				var txt = this.name;
+				var width = ctx.measureText(txt).width;
+				ctx.textAlign = 'center';
 
-			ctx.fillStyle = "#cccccc";
-			ctx.fillText(txt, this.posX, this.posY+25);
+				ctx.fillStyle = "rgba(0,0,0,0.3)";
+				ctx.fillRect(this.posX-width/2-5, this.posY+15, width+10, 15);
+
+				ctx.fillStyle = "#cccccc";
+				ctx.fillText(txt, this.posX, this.posY+25);
+			}
 		}
 
 

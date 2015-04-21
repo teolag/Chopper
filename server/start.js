@@ -1,7 +1,6 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var Player = require('./player');
-var player;
 var db = require('./db');
 db.connect();
 
@@ -16,7 +15,6 @@ var port = 8055;
 var allowedOrigin = 'http://xio.se';
 var allowedProtocol = 'chopper';
 
-var connection;
 var connectionId = 1;
 
 var players = [];
@@ -42,60 +40,72 @@ function incomingRequest(request) {
         return false;
     }
 
-    connection = request.accept(allowedProtocol, request.origin);
+    var connection = request.accept(allowedProtocol, request.origin);
 	connection.on('message', incomingMessage);
 	connection.on('close', connectionClosed);
 
     connection.id = connectionId++;
 
-	player = new Player(connection, db);
+	var player = new Player(connection, db);
 	players.push(player);
-}
 
-function connectionClosed(reasonCode, description) {
-	//var userExit = {type:"userExit", id: connection.id};
-	//sendToOthers(userExit);
-	console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.', reasonCode, description);
-}
+	function incomingMessage(message) {
+		if(message.type !== 'utf8') {
+			console.warn("Invalid message", message);
+			return;
+		}
+		try {
+			var data = JSON.parse(message.utf8Data);
+		} catch(e) {
+			console.error("Error parsing message", e, message);
+			return;
+		}
 
-function incomingMessage(message) {
-	if(message.type !== 'utf8') {
-		console.warn("Invalid message", message);
-		return;
-	}
-	try {
-		var data = JSON.parse(message.utf8Data);
-	} catch(e) {
-		console.error("Error parsing message", e);
-		return;
-	}
+		switch(data.type) {
 
-	switch(data.type) {
-
-		case "characterPos":
-		console.log("got position, forward to others");
-		sendToOthers(data);
-		break;
+			case "characterPos":
+			console.log("got position from "+connection.id+", forward to others", message);
+			forwardToOthers(message);
+			break;
 
 
-		default:
-		player.incomingMessage(data);
+			default:
+			player.incomingMessage(data);
+		}
+
 	}
 
-}
-
-function sendToAll(message) {
-	for (var i=0; i<players.length; i++) {
-		players[i].connection.sendUTF(JSON.stringify(message));
+	function connectionClosed(reasonCode, description) {
+		//var userExit = {type:"userExit", id: connection.id};
+		//sendToOthers(userExit);
+		console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.', reasonCode, description);
 	}
-}
 
 
-function sendToOthers(message) {
-	for (var i=0; i<players.length; i++) {
-		if(players[i]!==player) {
+
+	function sendToAll(message) {
+		for (var i=0; i<players.length; i++) {
 			players[i].connection.sendUTF(JSON.stringify(message));
 		}
 	}
+
+
+	function sendToOthers(message) {
+		for (var i=0; i<players.length; i++) {
+			if(players[i]!==player) {
+				players[i].connection.sendUTF(JSON.stringify(message));
+			}
+		}
+	}
+
+	function forwardToOthers(message) {
+		for (var i=0; i<players.length; i++) {
+			if(players[i]!==player) {
+				players[i].connection.sendUTF(message.utf8Data);
+				console.log("forward to", players[i].connection.id);
+			}
+		}
+	}
+
 }
 

@@ -34,6 +34,7 @@ var Game = (function() {
 	};
 
 	var updateCharacterPos = function(id, x, y) {
+		console.log(id, x, y);
 		for(var i=0; i<characters.length; i++) {
 			var character = characters[i];
 			if(character.id===id) {
@@ -102,7 +103,8 @@ var Game = (function() {
 
 		for(var i=0; i<characters.length; i++) {
 			var character = characters[i];
-			character.draw(context);
+			var active = character===activeCharacter;
+			character.draw(context, active);
 		}
 
 

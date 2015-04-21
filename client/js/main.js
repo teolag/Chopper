@@ -67,7 +67,6 @@ function messageReceived(e) {
 
 		case "characterPos":
 		Game.updateCharacterPos(data.characterId, data.x, data.y);
-		console.log(data.characterId, data.x, data.y);
 		break;
 
 		default:
