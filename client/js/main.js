@@ -69,6 +69,11 @@ function messageReceived(e) {
 		Game.updateCharacterPos(data.characterId, data.x, data.y);
 		break;
 
+		case "trees":
+		Game.setTrees(data.trees);
+		console.log("trees", data.trees);
+		break;
+
 		default:
 		console.log("Message received:", data);
 	}

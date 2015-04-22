@@ -1,8 +1,9 @@
 var Game = (function() {
 	var canvas, context;
-	var activeCharacter, characters=[];
+	var activeCharacter, characters = [];
 	var camera;
 	var pressedKeys = {};
+	var trees = [];
 
 	var init = function() {
 		canvas = document.getElementById("canvas");
@@ -41,6 +42,10 @@ var Game = (function() {
 				character.setPosition(x,y);
 			}
 		}
+	}
+
+	var setTrees = function(treeArray) {
+		trees = treeArray;
 	}
 
 	var gameLoop = function() {
@@ -83,6 +88,7 @@ var Game = (function() {
 
 		// Horizontal lines
 		context.fillStyle = "rgba(0,0,0,0.3)";
+		context.strokeStyle = "rgba(0,0,0,0.1)";
 		for(var y=Math.round(view.top/100)*100; y<view.bottom; y+=100) {
 			context.beginPath();
 			context.moveTo(view.left, y);
@@ -93,6 +99,7 @@ var Game = (function() {
 
 		// Vertical lines
 		context.fillStyle = "rgba(0,0,0,0.3)";
+		context.strokeStyle = "rgba(0,0,0,0.1)";
 		for(var x=Math.round(view.left/100)*100; x<view.right; x+=100) {
 			context.beginPath();
 			context.moveTo(x, view.top);
@@ -101,14 +108,32 @@ var Game = (function() {
 			context.fillText(x, x+5, view.top+10);
 		}
 
+
 		for(var i=0; i<characters.length; i++) {
 			var character = characters[i];
 			var active = character===activeCharacter;
 			character.draw(context, active);
 		}
 
+		drawTrees();
 
 		context.restore();
+	};
+
+
+	var drawTrees = function() {
+		for(var i=0; i<trees.length; i++) {
+
+			context.fillStyle = "rgba(150, 100, 75, 1)";
+			context.beginPath();
+			context.arc(trees[i].x, trees[i].y, trees[i].r/4, 0, Math.PI*2);
+			context.fill();
+
+			context.fillStyle = "rgba(52, 95, 35, .6)";
+			context.beginPath();
+			context.arc(trees[i].x, trees[i].y, trees[i].r, 0, Math.PI*2);
+			context.fill();
+		}
 	};
 
 	var keyHandler = function(e) {
@@ -129,6 +154,7 @@ var Game = (function() {
 		init: init,
 		setActiveCharacterId: setActiveCharacterId,
 		setCharacters: setCharacters,
-		updateCharacterPos: updateCharacterPos
+		updateCharacterPos: updateCharacterPos,
+		setTrees: setTrees
 	}
 }());

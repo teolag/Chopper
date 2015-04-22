@@ -1,6 +1,10 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
+var seed = require('seed-random');
+
 var Player = require('./player');
+var WorldGenerator = require('./world-generator');
+
 var db = require('./db');
 db.connect();
 
@@ -27,6 +31,9 @@ var wsServer = new WebSocketServer({httpServer: server, autoAcceptConnections: f
 wsServer.on('request', incomingRequest);
 
 
+var chunk = WorldGenerator.generateChunk(0,0);
+
+
 
 function incomingRequest(request) {
 	console.log("Incoming connection from ", request.remoteAddress, "with origin", request.origin);
@@ -49,9 +56,11 @@ function incomingRequest(request) {
 	players.push(player);
 
 	sendToOthers({type:"userEnter", id: connection.id});
+	connection.sendUTF(JSON.stringify({type:'trees', trees:chunk.trees}));
 
 	console.log("Connection " + connection.id + " successfully connected");
 	console.log("Active players: ", players.length);
+
 
 
 	function incomingMessage(message) {
@@ -72,15 +81,12 @@ function incomingRequest(request) {
 			forwardToOthers(message);
 			break;
 
-
 			default:
 			player.incomingMessage(data);
 		}
-
 	}
 
 	function connectionClosed(reasonCode, description) {
-
 		for (var i=0; i<players.length; i++) {
 			if(players[i]===player) {
 				players.splice(i, 1);
@@ -92,12 +98,9 @@ function incomingRequest(request) {
 		console.log("Connection " + connection.id + ' disconnected.', reasonCode, description);
 		console.log("Active players: ", players.length);
 
-
 		player=null;
 		connection=null;
-
 	}
-
 
 
 	function sendToAll(message) {
