@@ -55,9 +55,10 @@ if(!empty($googleId)) {
 		<title>Chopper</title>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="css/main.css" type="text/css" />
+		<script src="js/Camera.js"></script>
 		<script src="js/CharacterList.js"></script>
 		<script src="js/Character.js"></script>
-		<script src="js/Camera.js"></script>
+		<script src="js/Connection.js"></script>
 		<script src="js/Game.js"></script>
 		<?php if(isset($userId)) echo "<script>var userId='{$userId}'</script>"; ?>
 	</head>
@@ -70,13 +71,18 @@ if(!empty($googleId)) {
 				<a href="logout.php">Logout</a>
 			</section>
 
-			<section class="login">
-				<ul class="characters"></ul>
+			<section class="connection">
+				<div class="status"></div>
+				<button type="button" class="connect">Connect</button>
 			</section>
 
-			<section class="play">
+			<section class="game" style="display:none">
+				<ul class="characters"></ul>
 				<canvas id="canvas" width="800" height="600"></canvas>
 			</section>
+
+
+
 			<script src="js/main.js"></script>
 		<?php else: ?>
 			<a href="<?php echo $googleLoginURL;?>">Login using Google</a>

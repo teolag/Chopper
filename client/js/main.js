@@ -3,38 +3,25 @@ var socket;
 var connected;
 
 
+var gameSection = document.querySelector("section.game");
+
+
 CharacterList.init();
 Game.init();
 
-requestConnection();
-
-function requestConnection() {
-	socket = new WebSocket("ws://chopper.xio.se:8055/", "chopper");
-	socket.addEventListener("open", connectionEstablished);
-	socket.addEventListener("error", connectionFailed);
-	socket.addEventListener("close", connectionClosed);
-}
-
-function connectionEstablished(e) {
-	socket.addEventListener("message", messageReceived);
-	console.log("Connection established!", e.target.url, e.target.protocol);
-	connected = true;
-}
+Connection.init();
 
 
-function connectionClosed(e) {
-	connected = false;
-	console.log("Connection was closed", e);
-}
+Connection.on("connected", function() {
+	show(gameSection);
+});
+
+Connection.on("disconnected", function() {
+	hide(gameSection);
+});
 
 
-function connectionFailed(e) {
-	connected = false;
-	console.log("Can not connect to websocket", e);
-}
-
-
-function messageReceived(e) {
+Connection.on("message", function(e) {
 	try {
 		var data = JSON.parse(e.data);
 	} catch(e) {
@@ -78,4 +65,22 @@ function messageReceived(e) {
 		console.log("Message received:", data);
 	}
 
+});
+
+
+
+
+
+
+
+
+
+
+
+
+function hide(elem) {
+	elem.style.display = "none";
+}
+function show(elem) {
+	elem.style.removeProperty('display');
 }

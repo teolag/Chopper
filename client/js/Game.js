@@ -86,28 +86,7 @@ var Game = (function() {
 			bottom: camera.focusY+canvas.height/2
 		};
 
-		// Horizontal lines
-		context.fillStyle = "rgba(0,0,0,0.3)";
-		context.strokeStyle = "rgba(0,0,0,0.1)";
-		for(var y=Math.round(view.top/100)*100; y<view.bottom; y+=100) {
-			context.beginPath();
-			context.moveTo(view.left, y);
-			context.lineTo(view.right, y);
-			context.stroke();
-			context.fillText(y, view.left+10, y+10);
-		}
-
-		// Vertical lines
-		context.fillStyle = "rgba(0,0,0,0.3)";
-		context.strokeStyle = "rgba(0,0,0,0.1)";
-		for(var x=Math.round(view.left/100)*100; x<view.right; x+=100) {
-			context.beginPath();
-			context.moveTo(x, view.top);
-			context.lineTo(x, view.bottom);
-			context.stroke();
-			context.fillText(x, x+5, view.top+10);
-		}
-
+		drawGrid(context, view);
 
 		for(var i=0; i<characters.length; i++) {
 			var character = characters[i];
@@ -118,6 +97,30 @@ var Game = (function() {
 		drawTrees();
 
 		context.restore();
+	};
+
+
+	var drawGrid = function(context, view) {
+		context.fillStyle = "rgba(0,0,0,0.3)";
+		context.strokeStyle = "rgba(0,0,0,0.1)";
+
+		// Horizontal lines
+		for(var y=Math.round(view.top/100)*100; y<view.bottom; y+=100) {
+			context.beginPath();
+			context.moveTo(view.left, y);
+			context.lineTo(view.right, y);
+			context.stroke();
+			context.fillText(y, view.left+5, y+10);
+		}
+
+		// Vertical lines
+		for(var x=Math.round(view.left/100)*100; x<view.right; x+=100) {
+			context.beginPath();
+			context.moveTo(x, view.top);
+			context.lineTo(x, view.bottom);
+			context.stroke();
+			context.fillText(x, x+5, view.top+10);
+		}
 	};
 
 
