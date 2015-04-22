@@ -1,4 +1,6 @@
 var Connection = (function() {
+	"use strict";
+
 	var section, btnConnect, statusText;
 
 	var url = "chopper.xio.se:8055";

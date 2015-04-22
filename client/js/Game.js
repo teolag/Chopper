@@ -1,9 +1,13 @@
 var Game = (function() {
+	"use strict";
+
 	var canvas, context;
 	var activeCharacter, characters = [];
 	var camera;
 	var pressedKeys = {};
 	var trees = [];
+
+	var run = false;
 
 	var init = function() {
 		canvas = document.getElementById("canvas");
@@ -13,9 +17,6 @@ var Game = (function() {
 
 		addEventListener("keydown", keyHandler, false)
 		addEventListener("keyup", keyHandler, false)
-
-
-		gameLoop();
 	};
 
 	var setCharacters = function(list) {
@@ -42,17 +43,16 @@ var Game = (function() {
 				character.setPosition(x,y);
 			}
 		}
-	}
+	};
 
 	var setTrees = function(treeArray) {
 		trees = treeArray;
-	}
+	};
 
 	var gameLoop = function() {
-
 		update();
 		draw();
-		requestAnimationFrame(gameLoop);
+		if(run) requestAnimationFrame(gameLoop);
 	};
 
 	var update = function() {
@@ -147,10 +147,20 @@ var Game = (function() {
 		}
 	};
 
-
+	//TODO: call this to only render visible items
 	var isVisible = function(view, x, y) {
 		return true;
 	};
+
+	var start = function() {
+		run=true;
+		gameLoop();
+	};
+
+	var stop = function() {
+		run=false;
+	}
+
 
 
 	return {
@@ -158,6 +168,8 @@ var Game = (function() {
 		setActiveCharacterId: setActiveCharacterId,
 		setCharacters: setCharacters,
 		updateCharacterPos: updateCharacterPos,
-		setTrees: setTrees
+		setTrees: setTrees,
+		start: start,
+		stop: stop
 	}
 }());

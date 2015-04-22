@@ -1,3 +1,5 @@
+"use strict";
+
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var seed = require('seed-random');

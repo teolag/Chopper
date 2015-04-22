@@ -1,4 +1,4 @@
-
+"use strict";
 
 var Player = function(connection, db) {
 	this.db = db;

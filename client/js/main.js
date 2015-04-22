@@ -1,3 +1,4 @@
+"use strict";
 
 var socket;
 var connected;
@@ -14,10 +15,12 @@ Connection.init();
 
 Connection.on("connected", function() {
 	show(gameSection);
+	Game.start();
 });
 
 Connection.on("disconnected", function() {
 	hide(gameSection);
+	Game.stop();
 });
 
 

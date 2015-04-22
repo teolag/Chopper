@@ -1,4 +1,5 @@
 var CharacterList = (function() {
+	"use strict";
 
 	var characters = [];
 	var list;
