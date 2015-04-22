@@ -5,7 +5,8 @@
   "main": "start.js",
   "dependencies": {
     "mysql": "~2.6.2",
-    "websocket": "~1.0.18"
+    "websocket": "~1.0.18",
+	"seed-random": "~2.2.0"
   },
   "devDependencies": {},
   "scripts": {
