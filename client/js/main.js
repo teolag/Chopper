@@ -9,7 +9,7 @@ Game.init();
 requestConnection();
 
 function requestConnection() {
-	socket = new WebSocket("ws://xio.se:8055/", "chopper");
+	socket = new WebSocket("ws://chopper.xio.se:8055/", "chopper");
 	socket.addEventListener("open", connectionEstablished);
 	socket.addEventListener("error", connectionFailed);
 	socket.addEventListener("close", connectionClosed);

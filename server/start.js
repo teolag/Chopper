@@ -12,7 +12,7 @@ var server = http.createServer(function (req, res) {
 });
 
 var port = 8055;
-var allowedOrigin = 'http://xio.se';
+var allowedOrigin = 'http://chopper.xio.se';
 var allowedProtocol = 'chopper';
 
 var connectionId = 1;
