@@ -2,7 +2,6 @@ var WebSocketServer = require('websocket').server;
 var http = require('http');
 var Player = require('./player');
 var db = require('./db');
-db.connect();
 
 
 var server = http.createServer(function (req, res) {
