@@ -52,8 +52,9 @@ if(!empty($googleId)) {
 <!doctype html>
 <html>
 	<head>
-		<title>Chopper</title>
+		<title>Choppers vs. Seeders</title>
 		<meta charset="utf-8" />
+		<link rel="icon shortcut" href="/img/favicon.png" sizes="32x32">
 		<link rel="stylesheet" href="css/main.css" type="text/css" />
 		<script src="js/Camera.js"></script>
 		<script src="js/CharacterList.js"></script>
@@ -80,7 +81,6 @@ if(!empty($googleId)) {
 				<ul class="characters"></ul>
 				<canvas id="canvas" width="800" height="600"></canvas>
 			</section>
-
 
 
 			<script src="js/main.js"></script>
