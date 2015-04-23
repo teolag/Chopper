@@ -73,17 +73,30 @@ Connection.on("message", function(e) {
 
 
 
-
-
-
-
-
-
-
+// Helpers
 
 function hide(elem) {
 	elem.style.display = "none";
 }
 function show(elem) {
 	elem.style.removeProperty('display');
+}
+
+
+
+
+
+
+
+// Cheats
+
+function jumpTo(x,y) {
+	if(typeof x == "string") {
+		var word = x;
+		if(word=="home"||word=="origin") {
+			Game.setPosition(0,0);
+		}
+	} else {
+		Game.setPosition(x,y);
+	}
 }

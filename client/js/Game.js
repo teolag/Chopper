@@ -49,6 +49,16 @@ var Game = (function() {
 		trees = treeArray;
 	};
 
+	var setPosition = function(x, y) {
+		if(activeCharacter) {
+			activeCharacter.posX=x;
+			activeCharacter.posY=y;
+		} else {
+			console.warn("no charcter selected");
+		}
+
+	}
+
 	var gameLoop = function() {
 		update();
 		draw();
@@ -170,6 +180,7 @@ var Game = (function() {
 		updateCharacterPos: updateCharacterPos,
 		setTrees: setTrees,
 		start: start,
-		stop: stop
+		stop: stop,
+		setPosition: setPosition
 	}
 }());
