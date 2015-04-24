@@ -14,6 +14,10 @@ Connection.init();
 
 
 Connection.on("connected", function() {
+	Connection.sendMessage({
+		type:'introduce',
+		identifier: identifier
+	});
 	show(gameSection);
 	Game.start();
 });
@@ -36,10 +40,6 @@ Connection.on("message", function(e) {
 
 		case "welcome":
 		console.log("Connected with connectionId:", data.connectionId);
-		socket.send(JSON.stringify({
-			type:'introduce',
-			userId:userId
-		}));
 		break;
 
 		case "myCharacters":

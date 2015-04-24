@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Choppers vs Seeders</title>
+		<meta charset="utf-8" />
+		<link rel="icon shortcut" href="/img/favicon.png" sizes="32x32">
+		<link rel="stylesheet" href="/css/main.css" type="text/css" />
+		<script src="/js/Camera.js"></script>
+		<script src="/js/CharacterList.js"></script>
+		<script src="/js/Character.js"></script>
+		<script src="/js/Connection.js"></script>
+		<script src="/js/Game.js"></script>
+		<script>var identifier="<%= user.identifier %>";</script>
+	</head>
+	<body>
+
+
+		<section class="user">
+			<div><%= user.name %></div>
+			<div><%= user.email %></div>
+			<div><%= user.identifier %></div>
+			<a href="logout.php">Logout</a>
+		</section>
+
+		<section class="connection">
+			<div class="status"></div>
+			<button type="button" class="connect">Connect</button>
+		</section>
+
+		<section class="game" style="display:none">
+			<ul class="characters"></ul>
+			<canvas id="canvas" width="800" height="600"></canvas>
+		</section>
+
+
+		<script src="js/main.js"></script>
+
+	</body>
+</html>

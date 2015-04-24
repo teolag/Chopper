@@ -10,12 +10,12 @@ var CharacterList = (function() {
 	};
 
 	var setItems = function(items) {
+		console.log("Recieved a list of characters", items);
 		characters = items;
 		updateList();
 	};
 
 	var updateList = function() {
-		console.log("Recieved a list of characters", characters);
 		list.innerHTML = "";
 		for(var i=0, l=characters.length; i<l; i++) {
 			var c = characters[i];

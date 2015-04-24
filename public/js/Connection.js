@@ -6,6 +6,7 @@ var Connection = (function() {
 	var url = "chopper.xio.se:8055";
 	var connected = false;
 	var callbacks = {};
+	var socket;
 
 
 	var init = function() {
@@ -76,12 +77,17 @@ var Connection = (function() {
 		if(callbacks.hasOwnProperty("message")) {
 			callbacks["message"](e);
 		}
-	}
+	};
+
+	var sendMessage = function(message) {
+		socket.send(JSON.stringify(message));
+	};
 
 
 
 	return {
 		init: init,
-		on: setEventCallback
+		on: setEventCallback,
+		sendMessage: sendMessage
 	}
 }());

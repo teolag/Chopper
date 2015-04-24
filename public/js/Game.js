@@ -72,12 +72,12 @@ var Game = (function() {
 			if(activeCharacter.moved) {
 				camera.setFocus(activeCharacter.posX, activeCharacter.posY);
 				//console.log("Pos:", activeCharacter.posX, activeCharacter.posY);
-				socket.send(JSON.stringify({
-					type:'characterPos',
-					characterId:activeCharacter.id,
+				Connection.sendMessage({
+					type: 'characterPos',
+					characterId: activeCharacter.id,
 					x: activeCharacter.posX,
 					y: activeCharacter.posY
-				}));
+				});
 			}
 		}
 	};

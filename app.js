@@ -3,31 +3,85 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var seed = require('seed-random');
+var express = require('express');
 
-var Player = require('./player');
-var WorldGenerator = require('./world-generator');
+var Player = require('./modules/player');
+var requestLogger = require('./modules/request-logger');
+var WorldGenerator = require('./modules/world-generator');
+var db = require('./modules/db');
+var google = require('./modules/google.js');
+var config = require('./config.json');
 
-var db = require('./db');
+
+console.log('---------------------------------------------------');
+console.log('Starting Chopper server...');
+
+
+
 db.connect();
 
-
-var server = http.createServer(function (req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	console.log(req);
-	res.end('Hello World\n');
-});
-
 var port = 8055;
-var allowedOrigin = 'http://chopper.xio.se';
+var allowedOrigin = 'http://chopper.xio.se:8055';
 var allowedProtocol = 'chopper';
+var loggedIn = false;
+
+var app = express();
+app.set('view engine', 'ejs');
+app.use(requestLogger);
+app.use("/js", express.static('public/js'));
+app.use("/css", express.static(__dirname + '/public/css'));
+app.use("/img", express.static(__dirname + '/public/img'));
+app.use(express.static(__dirname + '/public'));
+
 
 var connectionId = 1;
-
 var players = [];
+var users = {};
 
-server.listen(port, function() {
-    console.log(new Date() + ' Chopper game server started, listening on port ' + port);
+
+
+
+
+app.get('/', function (req, res) {
+
+	if(req.query.code) {
+		var code = req.query.code;
+		google.getToken(code, function() {
+			console.log("google login callback");
+			google.getUserInfo(function(data){
+				var user = {
+					name: data.name,
+					email: data.email,
+					identifier: data.email+(Math.random()*10000)
+				};
+				users[user.identifier] = user;
+				console.log("users", users);
+				res.render(__dirname + '/pages/index', {user:user});
+			});
+		});
+	} else {
+
+		res.render(__dirname + '/pages/login', {
+			url: google.getAuthURL()
+		});
+	}
 });
+
+
+
+var server = app.listen(port, function () {
+  var port = server.address().port;
+  console.log('Listening on port %s', port);
+});
+
+
+var loginAccepted = function(data) {
+	console.log("Login accepted", data);
+};
+
+
+
+
 
 var wsServer = new WebSocketServer({httpServer: server, autoAcceptConnections: false});
 wsServer.on('request', incomingRequest);
@@ -41,12 +95,14 @@ function incomingRequest(request) {
 	console.log("Incoming connection from ", request.remoteAddress, "with origin", request.origin);
 
     if (request.origin !== allowedOrigin) {
+		console.log("origin", request.origin);
 		request.reject();
 		return;
     }
     if (request.requestedProtocols.indexOf(allowedProtocol) === -1) {
+		console.log("requestedProtocols", request.requestedProtocols);
         request.reject();
-        return false;
+        return;
     }
 
     var connection = request.accept(allowedProtocol, request.origin);
@@ -81,6 +137,10 @@ function incomingRequest(request) {
 
 			case "characterPos":
 			forwardToOthers(message);
+			break;
+
+			case "introduce":
+			player.setUser(users[data.identifier]);
 			break;
 
 			default:
