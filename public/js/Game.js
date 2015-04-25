@@ -31,16 +31,18 @@ var Game = (function() {
 			var character = characters[i];
 			if(character.id===characterId) {
 				activeCharacter = character;
+				return;
 			}
 		}
 	};
 
-	var updateCharacterPos = function(id, x, y) {
+	var updateCharacterPos = function(id, pos) {
 		//console.log(id, x, y);
 		for(var i=0; i<characters.length; i++) {
 			var character = characters[i];
 			if(character.id===id) {
-				character.setPosition(x,y);
+				character.setPosition(pos);
+				return;
 			}
 		}
 	};
@@ -49,34 +51,38 @@ var Game = (function() {
 		trees = treeArray;
 	};
 
-	var setPosition = function(x, y) {
+	var setPosition = function(pos) {
 		if(activeCharacter) {
-			activeCharacter.posX=x;
-			activeCharacter.posY=y;
+			activeCharacter.setPosition(pos);
 		} else {
 			console.warn("no charcter selected");
 		}
 
 	}
 
-	var gameLoop = function() {
-		update();
-		draw();
+	var lastTs;
+	var gameLoop = function(ts) {
+		if(ts && lastTs) {
+			var dt = (ts-lastTs)/1000;
+			update(dt);
+			draw();
+		}
+		lastTs = ts;
 		if(run) requestAnimationFrame(gameLoop);
 	};
 
-	var update = function() {
+	var update = function(dt) {
 		if(activeCharacter) {
 
-			activeCharacter.update(pressedKeys);
+			activeCharacter.update(dt, pressedKeys);
 			if(activeCharacter.moved) {
-				camera.setFocus(activeCharacter.posX, activeCharacter.posY);
+				camera.setFocus(activeCharacter.pos.x, activeCharacter.pos.y);
 				//console.log("Pos:", activeCharacter.posX, activeCharacter.posY);
 				Connection.sendMessage({
 					type: 'characterPos',
 					characterId: activeCharacter.id,
-					x: activeCharacter.posX,
-					y: activeCharacter.posY
+					x: activeCharacter.pos.x,
+					y: activeCharacter.pos.y
 				});
 			}
 		}
@@ -87,7 +93,11 @@ var Game = (function() {
 		context.fillStyle = "#9ABD86";
 		context.fillRect(0, 0, canvas.width, canvas.height);
 
-		context.translate(-camera.focusX+canvas.width/2, -camera.focusY+canvas.height/2);
+		context.translate(canvas.width/2, canvas.height/2);
+		context.scale(1, 0.5);
+		context.rotate(Math.PI/4);
+		context.translate(-camera.focusX, -camera.focusY);
+
 
 		var view = {
 			left: camera.focusX-canvas.width/2,
@@ -135,17 +145,27 @@ var Game = (function() {
 
 
 	var drawTrees = function() {
+
 		for(var i=0; i<trees.length; i++) {
+			var r = trees[i].r;
+			var height = r*2;
+
+			context.save();
+
+			context.translate(trees[i].x, trees[i].y);
+			context.rotate(-Math.PI/4);
+			context.scale(1, 2);
+
 
 			context.fillStyle = "rgba(150, 100, 75, 1)";
+			context.fillRect(-r/4, -height, r/2, height);
+
+			context.fillStyle = "rgba(52, 95, 35, 1)";
 			context.beginPath();
-			context.arc(trees[i].x, trees[i].y, trees[i].r/4, 0, Math.PI*2);
+			context.arc(0, -height, r, 0, Math.PI*2);
 			context.fill();
 
-			context.fillStyle = "rgba(52, 95, 35, .6)";
-			context.beginPath();
-			context.arc(trees[i].x, trees[i].y, trees[i].r, 0, Math.PI*2);
-			context.fill();
+			context.restore();
 		}
 	};
 

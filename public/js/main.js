@@ -56,7 +56,7 @@ Connection.on("message", function(e) {
 		break;
 
 		case "characterPos":
-		Game.updateCharacterPos(data.characterId, data.x, data.y);
+		Game.updateCharacterPos(data.characterId, new V2(data.x, data.y));
 		break;
 
 		case "trees":
@@ -94,9 +94,9 @@ function jumpTo(x,y) {
 	if(typeof x == "string") {
 		var word = x;
 		if(word=="home"||word=="origin") {
-			Game.setPosition(0,0);
+			Game.setPosition(new V2(0,0));
 		}
 	} else {
-		Game.setPosition(x,y);
+		Game.setPosition(new V2(x,y));
 	}
 }
