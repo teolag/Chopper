@@ -148,6 +148,7 @@ var Game = (function() {
 
 		for(var i=0; i<trees.length; i++) {
 			var r = trees[i].r;
+			var color = trees[i].color;
 			var height = r*2;
 
 			context.save();
@@ -160,7 +161,7 @@ var Game = (function() {
 			context.fillStyle = "rgba(150, 100, 75, 1)";
 			context.fillRect(-r/4, -height, r/2, height);
 
-			context.fillStyle = "rgba(52, 95, 35, 1)";
+			context.fillStyle = color;
 			context.beginPath();
 			context.arc(0, -height, r, 0, Math.PI*2);
 			context.fill();

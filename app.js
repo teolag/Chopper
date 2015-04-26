@@ -4,12 +4,14 @@ var WebSocketServer = require('websocket').server;
 var http = require('http');
 var seed = require('seed-random');
 var express = require('express');
+var session = require('express-session');
 
 var Player = require('./modules/player');
 var requestLogger = require('./modules/request-logger');
 var WorldGenerator = require('./modules/world-generator');
 var db = require('./modules/db');
 var google = require('./modules/google.js');
+var googleLogin = require('./modules/google-login.js');
 var config = require('./config.json');
 
 
@@ -27,40 +29,45 @@ var loggedIn = false;
 
 var app = express();
 app.set('view engine', 'ejs');
+app.use(session({
+  secret: 'h)&H#%&J46K#¤6',
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(requestLogger);
+
+app.use(googleLogin);
+
 app.use("/js", express.static('public/js'));
 app.use("/css", express.static(__dirname + '/public/css'));
 app.use("/img", express.static(__dirname + '/public/img'));
 app.use(express.static(__dirname + '/public'));
-
 
 var connectionId = 1;
 var players = [];
 var users = {};
 
 
-
-
-
 app.get('/', function (req, res) {
+	console.log("ROOT: req.session.token" , req.session.token? req.session.token.access_token : "---");
+	if(req.session.token) {
 
-	if(req.query.code) {
-		var code = req.query.code;
-		google.getToken(code, function() {
-			console.log("google login callback");
-			google.getUserInfo(function(data){
-				var user = {
-					name: data.name,
-					email: data.email,
-					identifier: data.email+(Math.random()*10000)
-				};
-				users[user.identifier] = user;
-				console.log("users", users);
-				res.render(__dirname + '/pages/index', {user:user});
-			});
+
+		google.getUserInfo(function(data){
+			console.log("google userinfo callback");
+			var user = {
+				name: data.name,
+				email: data.email,
+				identifier: Math.floor(Math.random()*10000000)
+			};
+			req.session.name = data.name;
+			users[user.identifier] = user;
+			console.log("users", users);
+			res.render(__dirname + '/pages/index', {user:user});
 		});
-	} else {
 
+
+	} else {
 		res.render(__dirname + '/pages/login', {
 			url: google.getAuthURL()
 		});

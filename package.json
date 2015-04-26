@@ -6,6 +6,7 @@
   "dependencies": {
     "ejs": "~2.3.1",
     "express": "~4.12.3",
+    "express-session": "^1.11.1",
     "googleapis": "^2.0.2",
     "mysql": "~2.6.2",
     "seed-random": "~2.2.0",

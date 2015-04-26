@@ -49,8 +49,6 @@ Player.prototype = {
 			type: 'myCharacters',
 			characters: data
 		});
-
-		console.log("Player with characters", this);
 	},
 
 	allCharactersResponse: function(err, data) {

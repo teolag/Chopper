@@ -32,7 +32,8 @@ function getTreesInChunk(rnd, left, top) {
 				chunkTrees.push({
 					x:left+x,
 					y:top+y,
-					r:treeMinRadius + v/treeChance * (treeMaxRadius-treeMinRadius)
+					r:treeMinRadius + v/treeChance * (treeMaxRadius-treeMinRadius),
+					color: "rgba(52, 95, 35, 1)"
 				});
 			}
 		}

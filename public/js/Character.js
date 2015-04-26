@@ -19,7 +19,7 @@
 	_.prototype = {
 
 		setPosition: function(pos) {
-			this.pos=pos;
+			this.pos = pos;
 			this.moved = true;
 		},
 
@@ -44,14 +44,12 @@
 			delta = delta.norm().scale(speed*dt);
 			this.pos = this.pos.add(delta);
 
-
 			if(lastPos && lastPos.equals(this.pos)) {
 				this.moved = false;
 			} else {
 				this.moved = true;
 				lastPos=this.pos.clone();
 			}
-
 		},
 
 		draw: function(ctx, active) {

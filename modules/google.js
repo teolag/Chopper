@@ -22,7 +22,7 @@ function getToken(code, callback) {
 	oauth2Client.getToken(code, function(err, tokens) {
 		if(err) console.error("Error getting token:", err);
 		oauth2Client.setCredentials(tokens);
-		callback();
+		callback(tokens);
 	});
 
 }
