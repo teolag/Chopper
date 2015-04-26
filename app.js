@@ -19,9 +19,6 @@ console.log('---------------------------------------------------');
 console.log('Starting Chopper server...');
 
 
-
-db.connect();
-
 var port = 8055;
 var allowedOrigin = 'http://chopper.xio.se:8055';
 var allowedProtocol = 'chopper';
