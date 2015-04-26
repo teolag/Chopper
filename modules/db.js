@@ -1,7 +1,9 @@
+"use strict";
+
 var config = require('../config.json');
 var Datastore = require('nedb');
 var db = new Datastore({ filename: './data.json', autoload: true});
- 
+
 
 module.exports = {
 

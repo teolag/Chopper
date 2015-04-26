@@ -1,27 +1,37 @@
-
+"use strict";
 
 var Player = function(connection, db) {
 	this.db = db;
 	this.connection = connection;
+	this.user = null;
+	this.characters=[];
 
+	/*
 	this.sendToClient({
 		type: 'welcome',
 		connectionId: connection.id
 	});
+	*/
+
+	this.db.getAllCharacters(this.allCharactersResponse.bind(this));
 }
 
 Player.prototype = {
 
 
+	setUser: function(user) {
+		this.user = user;
+		this.db.getMyCharacters(this.user.email, this.myCharactersResponse.bind(this));
+	},
+
 	incomingMessage: function(data) {
 
 		switch(data.type) {
-
+			/*
 			case "introduce":
 			this.userId = data.userId;
-			this.db.getMyCharacters(this.userId, this.myCharactersResponse.bind(this));
-			this.db.getAllCharacters(this.allCharactersResponse.bind(this));
 			break;
+			*/
 
 			default:
 			console.log("Incoming message from id:", this.connection.id, data);
@@ -29,7 +39,11 @@ Player.prototype = {
 	},
 
 	myCharactersResponse: function(err, data) {
+		if(err) console.error("Error geting my characters: ", err);
+
+
 		//console.log("My character response", data, err);
+		this.characters = data;
 
 		this.sendToClient({
 			type: 'myCharacters',
@@ -38,7 +52,7 @@ Player.prototype = {
 	},
 
 	allCharactersResponse: function(err, data) {
-		//console.log("All characters response", data, err);
+		if(err) console.error("Error geting all characters: ", err);
 
 		this.sendToClient({
 			type: 'allCharacters',
@@ -47,9 +61,8 @@ Player.prototype = {
 	},
 
 	getCharacterResponse: function(err, data) {
-		if(err) {
-			console.error(err);
-		}
+		if(err) console.error("Error geting character: ", err);
+
 		this.character = data[0];
 		this.sendToClient({type:"returnSelectedCharacter", character: this.character});
 		console.log("character", this.character);
