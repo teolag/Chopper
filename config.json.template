@@ -1,11 +1,4 @@
 {
-	"db": {
-		"user":"",
-		"password":"",
-		"host":"",
-		"database":""
-	},
-
 	"oauth2": {
 		"client_id":"",
 		"redirect_uri":"",
