@@ -10,7 +10,7 @@
 
 
 	var _ = self.Character = function(data) {
-		this.id = data.characterId;
+		this.id = data._id;
 		this.name = data.name;
 		this.pos = new V2(data.posX, data.posY);
 		this.team = data.team;

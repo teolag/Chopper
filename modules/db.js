@@ -4,16 +4,12 @@ var config = require('../config.json');
 var Datastore = require('nedb');
 var db = new Datastore({ filename: './data.json', autoload: true});
 
-db.insert([{ a: 5 }, { a: 42 }, { a: 5 }], function (err) {
-	if(err) console.error("Error inserting data", err);
-  // err is a 'uniqueViolated' error
-  // The database was not modified
-});
+
 
 module.exports = {
 
 	getCharacter: function (id, callback) {
-        db.find({characterId: id}, callback);
+        db.find({_id: id}, callback);
 	},
 
 	getMyCharacters: function(googleId, callback) {
@@ -22,6 +18,13 @@ module.exports = {
 
 	getAllCharacters: function(callback) {
 	    db.find({}, callback);
+	},
+
+	insertCharacter: function(character, callback) {
+		db.insert(character, function (err, newCharacter) {
+			if(err) console.error("Error inserting data", err);
+			else callback(newCharacter);
+		});
 	}
 
 };

@@ -30,10 +30,27 @@
 			<button type="button" class="connect">Connect</button>
 		</section>
 
+		<section class="myCharacters">
+			<ul class="myCharacters"></ul>
+			<button id="btnNewCharacter">New character</button>
+		<section>
+
 		<section class="game" style="display:none">
-			<ul class="characters"></ul>
+
 			<canvas id="canvas" width="800" height="600"></canvas>
 		</section>
+
+
+		<dialog class="newCharacter">
+			<h1>New character</h1>
+			<input type="text" class="name" />
+			<label><input type="radio" name="team" class="team" value="seeder" checked />Seeder</label>
+			<label><input type="radio" name="team" class="team" value="chopper" />Chopper</label>
+
+			<button id="btnCancelCharacter">Cancel</button>
+			<button id="btnSaveCharacter">Save</button>
+
+		</dialog>
 
 
 		<script src="js/main.js"></script>

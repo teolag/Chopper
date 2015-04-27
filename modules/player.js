@@ -14,17 +14,22 @@ Player.prototype = {
 
 	setUser: function(user) {
 		this.user = user;
-		this.db.getMyCharacters(this.user.googleId, this.myCharactersResponse.bind(this));
+		this.db.getMyCharacters(this.user.id, this.myCharactersResponse.bind(this));
 	},
 
 	incomingMessage: function(data) {
 
 		switch(data.type) {
-			/*
-			case "introduce":
-			this.userId = data.userId;
+			case "newCharacter":
+			var character = data.character;
+			character.googleId = this.user.id;
+			character.posX = Math.floor(Math.random()*1000)-500;
+			character.posY = Math.floor(Math.random()*1000)-500;
+			this.db.insertCharacter(character, function(character) {
+				console.log("Character saved to database", character);
+			});
 			break;
-			*/
+
 
 			default:
 			console.log("Incoming message from id:", this.connection.id, data);

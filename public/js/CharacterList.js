@@ -2,11 +2,26 @@ var CharacterList = (function() {
 	"use strict";
 
 	var characters = [];
-	var list;
+	var list, btnNewCharacter, dialogNewCharacter, btnSaveCharacter, btnCancelCharacter, inputName, inputTeam;
 
 	var init = function() {
-		list = document.querySelector("ul.characters");
-		list.addEventListener("click", clickHandler, false);
+		list = document.querySelector("ul.myCharacters");
+		list.addEventListener("click", listClickHandler, false);
+
+
+		dialogNewCharacter = document.querySelector("dialog.newCharacter");
+
+		btnNewCharacter = document.getElementById("btnNewCharacter");
+		btnNewCharacter.addEventListener("click", addNewCharacter, false);
+
+		btnSaveCharacter = document.getElementById("btnSaveCharacter");
+		btnSaveCharacter.addEventListener("click", saveNewCharacter, false);
+
+		btnCancelCharacter = document.getElementById("btnCancelCharacter");
+		btnCancelCharacter.addEventListener("click", cancelNewCharacter, false);
+
+		inputName = dialogNewCharacter.querySelector("input.name");
+		inputTeam = dialogNewCharacter.querySelector("input.team");
 	};
 
 	var setItems = function(items) {
@@ -19,17 +34,38 @@ var CharacterList = (function() {
 		list.innerHTML = "";
 		for(var i=0, l=characters.length; i<l; i++) {
 			var c = characters[i];
-			list.innerHTML += "<li data-id='" + c.characterId + "'>" + c.name + "</li>";
+			list.innerHTML += "<li data-id='" + c._id + "'>" + c.name + "</li>";
 		}
 	};
 
-	var clickHandler = function(e) {
-		var id = parseInt(e.target.dataset.id);
+	var listClickHandler = function(e) {
+		var id = e.target.dataset.id;
 		if(id) {
 			console.log("clicked on character", id);
 			Game.setActiveCharacterId(id);
 		}
 	};
+
+	var addNewCharacter = function(e) {
+		dialogNewCharacter.showModal();
+	};
+
+	var cancelNewCharacter = function(e) {
+		inputName.value = "";
+		dialogNewCharacter.close();
+	};
+
+	var saveNewCharacter = function(e) {
+		var character = {
+			name: inputName.value,
+			team: inputTeam.value
+		};
+		Connection.sendMessage({type:"newCharacter", character:character});
+		inputName.value = "";
+		dialogNewCharacter.close();
+	};
+
+
 
 
 	return {
