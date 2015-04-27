@@ -51,16 +51,10 @@ app.get('/', function (req, res) {
 
 
 		google.getUserInfo(function(data){
-			console.log("google userinfo callback");
-			var user = {
-				name: data.name,
-				email: data.email,
-				identifier: Math.floor(Math.random()*10000000)
-			};
-			req.session.name = data.name;
-			users[user.identifier] = user;
-			console.log("users", users);
-			res.render(__dirname + '/pages/index', {user:user});
+			console.log("google userinfo callback", data);
+			var identifier = Math.floor(Math.random()*10000000);
+			users[identifier] = data;
+			res.render(__dirname + '/pages/index', {user:data, identifier:identifier});
 		});
 
 

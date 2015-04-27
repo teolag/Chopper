@@ -6,13 +6,6 @@ var Player = function(connection, db) {
 	this.user = null;
 	this.characters=[];
 
-	/*
-	this.sendToClient({
-		type: 'welcome',
-		connectionId: connection.id
-	});
-	*/
-
 	this.db.getAllCharacters(this.allCharactersResponse.bind(this));
 }
 
@@ -21,7 +14,7 @@ Player.prototype = {
 
 	setUser: function(user) {
 		this.user = user;
-		this.db.getMyCharacters(this.user.email, this.myCharactersResponse.bind(this));
+		this.db.getMyCharacters(this.user.googleId, this.myCharactersResponse.bind(this));
 	},
 
 	incomingMessage: function(data) {

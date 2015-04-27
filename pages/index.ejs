@@ -4,6 +4,7 @@
 		<title>Choppers vs Seeders</title>
 		<meta charset="utf-8" />
 		<link rel="icon shortcut" href="/img/favicon.png" sizes="32x32">
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto' type='text/css'>
 		<link rel="stylesheet" href="/css/main.css" type="text/css" />
 		<script src="/js/V2.js"></script>
 		<script src="/js/Camera.js"></script>
@@ -11,16 +12,18 @@
 		<script src="/js/Character.js"></script>
 		<script src="/js/Connection.js"></script>
 		<script src="/js/Game.js"></script>
-		<script>var identifier="<%= user.identifier %>";</script>
+		<script>var identifier="<%= identifier %>";</script>
 	</head>
 	<body>
 
+		<header>
+			<h1>Chopper</h1>
 
-		<section class="user">
-			<div><%= user.name %></div>
-			<div><%= user.email %></div>
-			<div><%= user.identifier %></div>
-		</section>
+			<section class="user">
+				<img src="<%= user.picture %>" />
+				<div><%= user.name %><br><%= user.email %></div>
+			</section>
+		</header>
 
 		<section class="connection">
 			<div class="status"></div>

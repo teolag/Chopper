@@ -1,4 +1,42 @@
+body {
+	background-color: #eee;
+}
+
+body, input, select, textarea {
+	font-family: 'Roboto', sans-serif;
+	font-size: 13px;
+	color: #333;
+	margin: 0;
+}
+
+header {
+	background-color: white;
+	display: flex;
+	padding: 0.5em;
+	box-shadow: 0 0 14px rgba(0,0,0,0.2);
+
+}
+header h1 {
+	margin: 0;
+	flex: 1;
+}
+
+section.user {
+	display: flex;
+}
+
+section.game {
+	text-align: center;
+}
+
 canvas {
-	border: 2px solid black;
 	max-width: 100%;
+	box-shadow: 0 0 14px rgba(0,0,0,0.2);
+	border: 0.5em solid #FFF;
+}
+
+
+section.user img {
+	height: 30px;
+	margin-right: 0.5em;
 }
