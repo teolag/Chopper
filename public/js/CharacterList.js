@@ -21,7 +21,6 @@ var CharacterList = (function() {
 		btnCancelCharacter.addEventListener("click", cancelNewCharacter, false);
 
 		inputName = dialogNewCharacter.querySelector("input.name");
-		inputTeam = dialogNewCharacter.querySelector("input.team");
 	};
 
 	var setItems = function(items) {
@@ -34,7 +33,7 @@ var CharacterList = (function() {
 		list.innerHTML = "";
 		for(var i=0, l=characters.length; i<l; i++) {
 			var c = characters[i];
-			list.innerHTML += "<li data-id='" + c._id + "'>" + c.name + "</li>";
+			list.innerHTML += "<li data-id='" + c._id + "'>" + c.name + "("+c.team+")</li>";
 		}
 	};
 
@@ -56,6 +55,7 @@ var CharacterList = (function() {
 	};
 
 	var saveNewCharacter = function(e) {
+		inputTeam = dialogNewCharacter.querySelector("input.team:checked");
 		var character = {
 			name: inputName.value,
 			team: inputTeam.value

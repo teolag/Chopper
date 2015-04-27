@@ -3,13 +3,20 @@ var Connection = (function() {
 
 	var section, btnConnect, statusText;
 
-	var url = "chopper.xio.se:8055";
 	var connected = false;
 	var callbacks = {};
 	var socket;
 
+	var config;
 
-	var init = function() {
+
+	var init = function(url, port, protocol) {
+		config = {
+			url: url,
+			port: port,
+			protocol: protocol
+		};
+
 		section = document.querySelector("section.connection");
 		statusText = section.querySelector(".status");
 		btnConnect = section.querySelector("button.connect");
@@ -32,9 +39,9 @@ var Connection = (function() {
 
 
 	function requestConnection() {
-		statusText.textContent = "Connecting to " + url;
+		statusText.textContent = "Connecting to " + config.url + " using port " + config.port;
 		btnConnect.textContent = "Connecting...";
-		socket = new WebSocket("ws://" + url + "/", "chopper");
+		socket = new WebSocket("ws://" + config.url + ":" + config.port + "/", config.protocol);
 		socket.addEventListener("open", connectionEstablished);
 		socket.addEventListener("error", connectionFailed);
 	}

@@ -12,12 +12,15 @@
 		<script src="/js/Character.js"></script>
 		<script src="/js/Connection.js"></script>
 		<script src="/js/Game.js"></script>
-		<script>var identifier="<%= identifier %>";</script>
+		<script>
+			var identifier = "<%= identifier %>";
+			var webSocket = <%- webSocketConfig %>;
+		</script>
 	</head>
 	<body>
 
 		<header>
-			<h1>Chopper</h1>
+			<h1>Choppers vs Seeders</h1>
 
 			<section class="user">
 				<img src="<%= user.picture %>" />

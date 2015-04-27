@@ -1,7 +1,17 @@
 {
 	"oauth2": {
 		"client_id":"",
-		"redirect_uri":"",
+		"redirect_uri":"http://chopper.xio.se:8055",
 		"client_secret":""
+	},
+
+	"webServer": {
+		"port":8055
+	},
+
+	"webSocket": {
+		"url":"chopper.xio.se",
+		"port":8055,
+		"protocol":"chopper"
 	}
 }

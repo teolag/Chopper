@@ -1,16 +1,12 @@
 "use strict";
 
-var socket;
-var connected;
-
-
 var gameSection = document.querySelector("section.game");
 
 
 CharacterList.init();
 Game.init();
 
-Connection.init();
+Connection.init(webSocket.url, webSocket.port, webSocket.protocol);
 
 
 Connection.on("connected", function() {

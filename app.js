@@ -18,23 +18,11 @@ var config = require('./config.json');
 console.log('---------------------------------------------------');
 console.log('Starting Chopper server...');
 
-
-var port = 8055;
-var allowedOrigin = 'http://chopper.xio.se:8055';
-var allowedProtocol = 'chopper';
-var loggedIn = false;
-
 var app = express();
 app.set('view engine', 'ejs');
-app.use(session({
-  secret: 'h)&H#%&J46K#¤6',
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(session({secret: 'h)&H#%&J46K#¤6', resave: false, saveUninitialized: true}));
 app.use(requestLogger);
-
 app.use(googleLogin);
-
 app.use("/js", express.static('public/js'));
 app.use("/css", express.static(__dirname + '/public/css'));
 app.use("/img", express.static(__dirname + '/public/img'));
@@ -54,7 +42,11 @@ app.get('/', function (req, res) {
 			console.log("google userinfo callback", data);
 			var identifier = Math.floor(Math.random()*10000000);
 			users[identifier] = data;
-			res.render(__dirname + '/pages/index', {user:data, identifier:identifier});
+			res.render(__dirname + '/pages/index', {
+				user: data,
+				identifier: identifier,
+				webSocketConfig: JSON.stringify(config.webSocket)
+			});
 		});
 
 
@@ -67,7 +59,7 @@ app.get('/', function (req, res) {
 
 
 
-var server = app.listen(port, function () {
+var server = app.listen(config.webServer.port, function () {
   var port = server.address().port;
   console.log('Listening on port %s', port);
 });
@@ -92,18 +84,19 @@ var chunk = WorldGenerator.generateChunk(0,0);
 function incomingRequest(request) {
 	console.log("Incoming connection from ", request.remoteAddress, "with origin", request.origin);
 
-    if (request.origin !== allowedOrigin) {
-		console.log("origin", request.origin);
+	var acceptedOrigin = "http://" + config.webSocket.url +":"+config.webSocket.port;
+    if (request.origin !== acceptedOrigin) {
+		console.log("origin rejected", request.origin, "!=", acceptedOrigin);
 		request.reject();
 		return;
     }
-    if (request.requestedProtocols.indexOf(allowedProtocol) === -1) {
+    if (request.requestedProtocols.indexOf(config.webSocket.protocol) === -1) {
 		console.log("requestedProtocols", request.requestedProtocols);
         request.reject();
         return;
     }
 
-    var connection = request.accept(allowedProtocol, request.origin);
+    var connection = request.accept(config.webSocket.protocol, request.origin);
 	connection.on('message', incomingMessage);
 	connection.on('close', connectionClosed);
     connection.id = connectionId++;

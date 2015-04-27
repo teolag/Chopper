@@ -14,7 +14,7 @@ function accessCheck(req, res, next) {
 			console.log("google token callback", token.access_token);
 			req.session.token = token;
 			console.log("redirect back to root");
-			res.redirect('http://chopper.xio.se:8055');
+			res.redirect('/');
 			res.end();
 		});
 	} else {

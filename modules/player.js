@@ -10,8 +10,6 @@ var Player = function(connection, db) {
 }
 
 Player.prototype = {
-
-
 	setUser: function(user) {
 		this.user = user;
 		this.db.getMyCharacters(this.user.id, this.myCharactersResponse.bind(this));
@@ -38,7 +36,6 @@ Player.prototype = {
 
 	myCharactersResponse: function(err, data) {
 		if(err) console.error("Error geting my characters: ", err);
-
 
 		//console.log("My character response", data, err);
 		this.characters = data;
@@ -69,10 +66,7 @@ Player.prototype = {
 	sendToClient: function(message) {
 		this.connection.sendUTF(JSON.stringify(message));
 	}
-
-
 };
-
 
 
 module.exports = Player;
