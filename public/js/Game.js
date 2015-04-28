@@ -5,6 +5,7 @@ var Game = (function() {
 	var activeCharacter, characters = [];
 	var camera;
 	var pressedKeys = {};
+	var pointerDown;
 	var trees = [];
 
 	var run = false;
@@ -15,8 +16,11 @@ var Game = (function() {
 
 		camera = new Camera();
 
-		addEventListener("keydown", keyHandler, false)
-		addEventListener("keyup", keyHandler, false)
+		addEventListener("keydown", keyHandler, false);
+		addEventListener("keyup", keyHandler, false);
+
+		canvas.addEventListener("mousedown", canvasPointerDown, false);
+		canvas.addEventListener("touchstart", canvasPointerDown, false);
 	};
 
 	var setCharacters = function(list) {
@@ -74,7 +78,7 @@ var Game = (function() {
 	var update = function(dt) {
 		if(activeCharacter) {
 
-			activeCharacter.update(dt, pressedKeys);
+			activeCharacter.update(dt, pressedKeys, pointerDown);
 			if(activeCharacter.moved) {
 				camera.setFocus(activeCharacter.pos.x, activeCharacter.pos.y);
 				//console.log("Pos:", activeCharacter.posX, activeCharacter.posY);
@@ -177,6 +181,38 @@ var Game = (function() {
 			pressedKeys[e.keyCode] = false;
 		}
 	};
+
+
+	var canvasPointerDown = function(e) {
+		e.preventDefault();
+		canvasPointerMove(e);
+
+		addEventListener("mouseup", canvasPointerUp, false);
+		addEventListener("mouseout", canvasPointerUp, false);
+		addEventListener("touchend", canvasPointerUp, false);
+		addEventListener("touchmove", canvasPointerMove, false);
+		addEventListener("mousemove", canvasPointerMove, false);
+
+		function canvasPointerMove(e) {
+			if(e.type==="touchstart" || e.type==="touchmove") {
+				var down = new V2(e.touches[0].clientX-canvas.offsetLeft, e.touches[0].clientY-canvas.offsetTop);
+			} else {
+				var down = new V2(e.clientX-canvas.offsetLeft, e.clientY-canvas.offsetTop);
+			}
+
+			pointerDown = down.sub(new V2(canvas.offsetWidth/2, canvas.offsetHeight/2));
+		}
+
+		function canvasPointerUp(e) {
+			pointerDown = null;
+			removeEventListener("mouseup", canvasPointerUp, false);
+			removeEventListener("mouseout", canvasPointerUp, false);
+			removeEventListener("touchend", canvasPointerUp, false);
+			removeEventListener("touchmove", canvasPointerMove, false);
+			removeEventListener("mousemove", canvasPointerMove, false);
+		}
+	};
+
 
 	//TODO: call this to only render visible items
 	var isVisible = function(view, x, y) {

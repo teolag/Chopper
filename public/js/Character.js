@@ -23,22 +23,30 @@
 			this.moved = true;
 		},
 
-		update: function(dt, pressedKeys) {
+		update: function(dt, pressedKeys, pointer) {
 			var speed = 100; // pixels per second
 
 			var delta = new V2(0,0);
 
-			if(pressedKeys[KEY_UP]) {
-				delta = delta.add(new V2(-1,-1));
-			}
-			if(pressedKeys[KEY_DOWN]) {
-				delta = delta.add(new V2(1,1));
-			}
-			if(pressedKeys[KEY_LEFT]) {
-				delta = delta.add(new V2(-1,1));
-			}
-			if(pressedKeys[KEY_RIGHT]) {
-				delta = delta.add(new V2(1,-1));
+			if(pointer) {
+				var dir = pointer.clone();
+				dir.y = dir.y*2;
+				dir = dir.rotate(Math.PI/4);
+				delta = delta.add(dir);
+				speed = Math.min(100, delta.length());
+			} else {
+				if(pressedKeys[KEY_UP]) {
+					delta = delta.add(new V2(-1,-1));
+				}
+				if(pressedKeys[KEY_DOWN]) {
+					delta = delta.add(new V2(1,1));
+				}
+				if(pressedKeys[KEY_LEFT]) {
+					delta = delta.add(new V2(-1,1));
+				}
+				if(pressedKeys[KEY_RIGHT]) {
+					delta = delta.add(new V2(1,-1));
+				}
 			}
 
 			delta = delta.norm().scale(speed*dt);

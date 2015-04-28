@@ -30,9 +30,10 @@ section.game {
 }
 
 canvas {
-	max-width: 100%;
+	max-width: 93%;
 	box-shadow: 0 0 14px rgba(0,0,0,0.2);
 	border: 0.5em solid #FFF;
+	cursor: crosshair;
 }
 
 
