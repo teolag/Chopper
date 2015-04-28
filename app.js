@@ -32,6 +32,17 @@ var connectionId = 1;
 var players = [];
 var users = {};
 
+app.get('/fake', function (req, res) {
+	var user = config.fakeLogin;
+	console.log("login as fake user", user);
+	var identifier = Math.floor(Math.random()*10000000);
+	users[identifier] = user;
+	res.render(__dirname + '/pages/index', {
+		user: user,
+		identifier: identifier,
+		webSocketConfig: JSON.stringify(config.webSocket)
+	});
+});
 
 app.get('/', function (req, res) {
 	console.log("ROOT: req.session.token" , req.session.token? req.session.token.access_token : "---");

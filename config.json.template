@@ -5,6 +5,12 @@
 		"client_secret":""
 	},
 
+	"fakeLogin": {
+		"id": "",
+		"email": "",
+		"name": ""
+	},
+
 	"webServer": {
 		"port":8055
 	},

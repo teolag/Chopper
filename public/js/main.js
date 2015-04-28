@@ -57,7 +57,6 @@ Connection.on("message", function(e) {
 
 		case "trees":
 		Game.setTrees(data.trees);
-		console.log("trees", data.trees);
 		break;
 
 		default:
