@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Choppers vs Seeders</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<link rel="icon shortcut" href="/img/favicon.png" sizes="32x32">
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto' type='text/css'>
+		<link rel="stylesheet" href="/css/main.css" type="text/css" />
+		<script src="/js/V2.js"></script>
+		<script src="/js/Camera.js"></script>
+		<script src="/js/CharacterList.js"></script>
+		<script src="/js/Character.js"></script>
+		<script src="/js/Connection.js"></script>
+		<script src="/js/Game.js"></script>
+		<script>
+			var identifier = "<%= identifier %>";
+			var webSocket = <%- webSocketConfig %>;
+		</script>
+	</head>
+	<body>
+
+		<header>
+			<h1>Choppers vs Seeders</h1>
+
+			<section class="user">
+				<img src="<%= user.picture %>" />
+				<div><%= user.name %><br><%= user.email %></div>
+			</section>
+		</header>
+
+		<section class="connection">
+			<div class="status"></div>
+			<button type="button" class="connect">Connect</button>
+		</section>
+
+		<section class="myCharacters">
+			<ul class="myCharacters"></ul>
+			<button id="btnNewCharacter">New character</button>
+		<section>
+
+		<section class="game" style="display:none">
+
+			<canvas id="canvas" width="800" height="600"></canvas>
+		</section>
+
+
+		<dialog class="newCharacter">
+			<h1>New character</h1>
+			<input type="text" class="name" />
+			<label><input type="radio" name="team" class="team" value="seeder" checked />Seeder</label>
+			<label><input type="radio" name="team" class="team" value="chopper" />Chopper</label>
+
+			<button id="btnCancelCharacter">Cancel</button>
+			<button id="btnSaveCharacter">Save</button>
+
+		</dialog>
+
+
+		<script src="js/main.js"></script>
+
+	</body>
+</html>
