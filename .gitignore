@@ -2,3 +2,4 @@ config.json
 data.json
 xiocode.properties
 node_modules
+.DS_Store
