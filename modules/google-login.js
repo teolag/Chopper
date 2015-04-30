@@ -13,6 +13,7 @@ function accessCheck(req, res, next) {
 		google.getToken(code, function(token) {
 			console.log("google token callback", token.access_token);
 			req.session.token = token;
+			req.session.authType = 'google';
 			console.log("redirect back to root");
 			res.redirect('/');
 			res.end();

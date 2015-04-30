@@ -28,11 +28,11 @@ function getToken(code, callback) {
 }
 
 
-function getUserInfo(callback) {
+function getUserInfo(callback, param1) {
 	var oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
 	oauth2.userinfo.get({}, function(err, data) {
 		if(err) console.error("Error getting user data:", err);
-		callback(data);
+		callback(data, param1);
 	});
 }
 

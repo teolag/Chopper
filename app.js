@@ -9,6 +9,7 @@ var session = require('express-session');
 var Player = require('./modules/player');
 var requestLogger = require('./modules/request-logger');
 var WorldGenerator = require('./modules/world-generator');
+var users = require('./modules/users');
 var db = require('./modules/db');
 var google = require('./modules/google.js');
 var googleLogin = require('./modules/google-login.js');
@@ -30,43 +31,8 @@ app.use(express.static(__dirname + '/public'));
 
 var connectionId = 1;
 var players = [];
-var users = {};
 
-app.get('/fake', function (req, res) {
-	var user = config.fakeLogin;
-	console.log("login as fake user", user);
-	var identifier = Math.floor(Math.random()*10000000);
-	users[identifier] = user;
-	res.render(__dirname + '/pages/index', {
-		user: user,
-		identifier: identifier,
-		webSocketConfig: JSON.stringify(config.webSocket)
-	});
-});
-
-app.get('/', function (req, res) {
-	console.log("ROOT: req.session.token" , req.session.token? req.session.token.access_token : "---");
-	if(req.session.token) {
-
-
-		google.getUserInfo(function(data){
-			console.log("google userinfo callback", data);
-			var identifier = Math.floor(Math.random()*10000000);
-			users[identifier] = data;
-			res.render(__dirname + '/pages/index', {
-				user: data,
-				identifier: identifier,
-				webSocketConfig: JSON.stringify(config.webSocket)
-			});
-		});
-
-
-	} else {
-		res.render(__dirname + '/pages/login', {
-			url: google.getAuthURL()
-		});
-	}
-});
+require('./lib/boot')(app, { verbose: !module.parent });
 
 
 
@@ -79,9 +45,6 @@ var server = app.listen(config.webServer.port, function () {
 var loginAccepted = function(data) {
 	console.log("Login accepted", data);
 };
-
-
-
 
 
 var wsServer = new WebSocketServer({httpServer: server, autoAcceptConnections: false});
@@ -142,7 +105,7 @@ function incomingRequest(request) {
 			break;
 
 			case "introduce":
-			player.setUser(users[data.identifier]);
+			player.setUser(users.get(data.identifier));
 			break;
 
 			default:
