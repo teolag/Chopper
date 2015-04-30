@@ -34,16 +34,6 @@ var players = [];
 
 require('./lib/boot')(app, { verbose: !module.parent });
 
-app.get('/fake', function (req, res) {
-	var user = config.fakeLogin;
-	console.log("login as fake user", user);
-	var identifier = users.login(user);
-	res.render(__dirname + '/pages/index', {
-		user: user,
-		identifier: identifier,
-		webSocketConfig: JSON.stringify(config.webSocket)
-	});
-});
 
 
 var server = app.listen(config.webServer.port, function () {
