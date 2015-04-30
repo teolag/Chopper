@@ -12,7 +12,10 @@ exports.index = function(req, res){
     console.log("ROOT: req.session.token" , req.session.token? req.session.token.access_token : "---");
     if(req.session.token) {
         if(req.session.authType === 'google') {
-            google.getUserInfo(renderIndex, res);
+            google.getUserInfo(function(data) {
+              console.log("google userinfo callback", data);
+              renderIndex(data, res);
+            });
         }
     } else {
         if (req.session.authType === 'fake') {
@@ -28,7 +31,6 @@ exports.index = function(req, res){
 };
 
 function renderIndex(data, res) {
-    console.log("google userinfo callback", data);
             var identifier = users.login(data);
             res.render('index', {
                 user: data,
